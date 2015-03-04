@@ -23,7 +23,7 @@ public final class DBSettings implements Serializable{
    //private static final String ARQUIVO_XML = "DBSettings_Local_botucarai.xml";
 	
 	private static final String PASTA_APLICACAO = "";
-	private static final String ARQUIVO_XML = "DBSettings.xml";
+	private static final String ARQUIVO_XML = "DBSettings.xml";  // bklakbkbkbkbkb
 	
 	public final static int TIPO_POSTGRES = 0;
 	public final static int TIPO_MYSQL = 1;
