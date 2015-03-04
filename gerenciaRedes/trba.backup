@@ -1,0 +1,393 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.2.1
+-- Dumped by pg_dump version 9.2.1
+-- Started on 2015-02-26 15:25:06
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 175 (class 3079 OID 11727)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1975 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 171 (class 1259 OID 13244067)
+-- Name: lab_agendamento; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lab_agendamento (
+    seq_agendametno integer NOT NULL,
+    cod_aluno integer,
+    cod_professor integer,
+    cod_assunto integer,
+    data_ini timestamp without time zone,
+    data_fim timestamp without time zone,
+    flag_staus character(1)
+);
+
+
+ALTER TABLE public.lab_agendamento OWNER TO postgres;
+
+--
+-- TOC entry 170 (class 1259 OID 13244059)
+-- Name: lab_assuntos; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lab_assuntos (
+    cod_assunto integer NOT NULL,
+    desc_assunto text
+);
+
+
+ALTER TABLE public.lab_assuntos OWNER TO postgres;
+
+--
+-- TOC entry 168 (class 1259 OID 13244038)
+-- Name: lab_curso; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lab_curso (
+    cod_curso integer NOT NULL,
+    desc_curso text
+);
+
+
+ALTER TABLE public.lab_curso OWNER TO postgres;
+
+--
+-- TOC entry 169 (class 1259 OID 13244046)
+-- Name: lab_pessoa; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lab_pessoa (
+    cod_pessoa integer NOT NULL,
+    num_matricula integer,
+    cod_curso integer,
+    num_telefone text,
+    desc_email text,
+    flag_tipo character(2),
+    desc_nome text
+);
+
+
+ALTER TABLE public.lab_pessoa OWNER TO postgres;
+
+--
+-- TOC entry 172 (class 1259 OID 13244087)
+-- Name: msys_combo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msys_combo (
+    cod_combo smallint NOT NULL,
+    nome_combo character varying(100) NOT NULL,
+    tipo_retorno smallint NOT NULL,
+    inf_combo character varying(200)
+);
+
+
+ALTER TABLE public.msys_combo OWNER TO postgres;
+
+--
+-- TOC entry 173 (class 1259 OID 13244092)
+-- Name: msys_combo_item; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msys_combo_item (
+    cod_combo smallint NOT NULL,
+    val_item character varying(20) NOT NULL,
+    seq_item smallint NOT NULL,
+    desc_item character varying(150) NOT NULL,
+    inf_comboitem character varying(200)
+);
+
+
+ALTER TABLE public.msys_combo_item OWNER TO postgres;
+
+--
+-- TOC entry 174 (class 1259 OID 13244107)
+-- Name: msys_tabela; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE msys_tabela (
+    cod_tabela smallint NOT NULL,
+    nome_tabela character varying(50) NOT NULL,
+    seq_livre integer NOT NULL,
+    inf_tabela character varying(200),
+    val_incremento smallint NOT NULL,
+    desc_titulo character varying(200),
+    flag_tipochave character(1)
+);
+
+
+ALTER TABLE public.msys_tabela OWNER TO postgres;
+
+--
+-- TOC entry 1964 (class 0 OID 13244067)
+-- Dependencies: 171
+-- Data for Name: lab_agendamento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY lab_agendamento (seq_agendametno, cod_aluno, cod_professor, cod_assunto, data_ini, data_fim, flag_staus) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1963 (class 0 OID 13244059)
+-- Dependencies: 170
+-- Data for Name: lab_assuntos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY lab_assuntos (cod_assunto, desc_assunto) FROM stdin;
+1	Anatomia Odontológica
+2	Fundamentos Básicos do Ser
+3	Humano - I
+4	Gastroenterologia (Saúde do Adulto – IV)
+5	Ginecologia (Saúde da Mulher – I)
+6	Miologia
+7	Neurologia
+8	Neurologia (Saúde do Adulto – V)
+9	Osteologia
+10	Sistema circulatório
+11	Sistema digestório
+12	Sistema renal/excretor
+13	Sistema reprodutor
+14	 Sistema respiratório
+15	Urologia (Saúde do Adulto - VI)
+16	 Radiologia
+\.
+
+
+--
+-- TOC entry 1961 (class 0 OID 13244038)
+-- Dependencies: 168
+-- Data for Name: lab_curso; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY lab_curso (cod_curso, desc_curso) FROM stdin;
+1	Ciências Biológicas
+2	Educação Física
+3	Enfermagem
+4	Estética e Cosmetologia
+5	Farmácia
+6	Fisioterapia
+7	Medicina
+8	Nutrição
+9	Odontologia
+10	Téc. em Enfermagem
+11	Téc. em Radiologia
+\.
+
+
+--
+-- TOC entry 1962 (class 0 OID 13244046)
+-- Dependencies: 169
+-- Data for Name: lab_pessoa; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY lab_pessoa (cod_pessoa, num_matricula, cod_curso, num_telefone, desc_email, flag_tipo, desc_nome) FROM stdin;
+1	257462	2	666	joal@varzea.com	AL	Jão da silva
+2	6786145	3	777	iko@varzea.com	AL	iko ferrera
+3	489897	2	64157-4	mae@varzea.com	AL	mae perera
+4	489897	5	22548-514	nimue@varzea.com	AL	nimue ap
+5	87877	3	787415	derfel@varzea.com	AL	derfel ap artur
+6	4456	7	1175	immortal@varzea.com	AL	immortal all shall fall
+7	4456	7	5115	drudkh@varzea.com	AL	drudkh whatever
+8	\N	7	5115	theprofessor@varzea.com	PF	The professor
+9	\N	\N	5115	Theadmin@varzea.com	AD	The Admin
+\.
+
+
+--
+-- TOC entry 1965 (class 0 OID 13244087)
+-- Dependencies: 172
+-- Data for Name: msys_combo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msys_combo (cod_combo, nome_combo, tipo_retorno, inf_combo) FROM stdin;
+1	lab_pesosa.flag_tipo	0	
+\.
+
+
+--
+-- TOC entry 1966 (class 0 OID 13244092)
+-- Dependencies: 173
+-- Data for Name: msys_combo_item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msys_combo_item (cod_combo, val_item, seq_item, desc_item, inf_comboitem) FROM stdin;
+1	AL	1	Aluno	\N
+1	AD	2	Administrador	\N
+1	PF	3	Professor	\N
+\.
+
+
+--
+-- TOC entry 1967 (class 0 OID 13244107)
+-- Dependencies: 174
+-- Data for Name: msys_tabela; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY msys_tabela (cod_tabela, nome_tabela, seq_livre, inf_tabela, val_incremento, desc_titulo, flag_tipochave) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1948 (class 2606 OID 13244071)
+-- Name: lab_agendamentopk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lab_agendamento
+    ADD CONSTRAINT lab_agendamentopk PRIMARY KEY (seq_agendametno);
+
+
+--
+-- TOC entry 1946 (class 2606 OID 13244066)
+-- Name: lab_assuntospk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lab_assuntos
+    ADD CONSTRAINT lab_assuntospk PRIMARY KEY (cod_assunto);
+
+
+--
+-- TOC entry 1942 (class 2606 OID 13244045)
+-- Name: lab_curso_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lab_curso
+    ADD CONSTRAINT lab_curso_pk PRIMARY KEY (cod_curso);
+
+
+--
+-- TOC entry 1944 (class 2606 OID 13244053)
+-- Name: lab_pessoa_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lab_pessoa
+    ADD CONSTRAINT lab_pessoa_pk PRIMARY KEY (cod_pessoa);
+
+
+--
+-- TOC entry 1950 (class 2606 OID 13244091)
+-- Name: pk_msys_combo; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msys_combo
+    ADD CONSTRAINT pk_msys_combo PRIMARY KEY (cod_combo);
+
+
+--
+-- TOC entry 1952 (class 2606 OID 13244096)
+-- Name: pk_msys_combo_item; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msys_combo_item
+    ADD CONSTRAINT pk_msys_combo_item PRIMARY KEY (cod_combo, val_item);
+
+
+--
+-- TOC entry 1954 (class 2606 OID 13244111)
+-- Name: pk_msys_tabela; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY msys_tabela
+    ADD CONSTRAINT pk_msys_tabela PRIMARY KEY (cod_tabela);
+
+
+--
+-- TOC entry 1956 (class 2606 OID 13244072)
+-- Name: fk_lab_agendamento_aluno; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY lab_agendamento
+    ADD CONSTRAINT fk_lab_agendamento_aluno FOREIGN KEY (cod_aluno) REFERENCES lab_pessoa(cod_pessoa);
+
+
+--
+-- TOC entry 1958 (class 2606 OID 13244082)
+-- Name: fk_lab_agendamento_cod_assunto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY lab_agendamento
+    ADD CONSTRAINT fk_lab_agendamento_cod_assunto FOREIGN KEY (cod_assunto) REFERENCES lab_assuntos(cod_assunto);
+
+
+--
+-- TOC entry 1957 (class 2606 OID 13244077)
+-- Name: fk_lab_agendamento_profesor; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY lab_agendamento
+    ADD CONSTRAINT fk_lab_agendamento_profesor FOREIGN KEY (cod_professor) REFERENCES lab_pessoa(cod_pessoa);
+
+
+--
+-- TOC entry 1955 (class 2606 OID 13244054)
+-- Name: fk_lab_pessoa_curso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY lab_pessoa
+    ADD CONSTRAINT fk_lab_pessoa_curso FOREIGN KEY (cod_curso) REFERENCES lab_curso(cod_curso);
+
+
+--
+-- TOC entry 1960 (class 2606 OID 13244102)
+-- Name: fk_msys_com_reference_msys_com; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY msys_combo_item
+    ADD CONSTRAINT fk_msys_com_reference_msys_com FOREIGN KEY (cod_combo) REFERENCES msys_combo(cod_combo);
+
+
+--
+-- TOC entry 1959 (class 2606 OID 13244097)
+-- Name: fk_msys_combo_item_reference_27_msys_combo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY msys_combo_item
+    ADD CONSTRAINT fk_msys_combo_item_reference_27_msys_combo FOREIGN KEY (cod_combo) REFERENCES msys_combo(cod_combo);
+
+
+--
+-- TOC entry 1974 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2015-02-26 15:25:07
+
+--
+-- PostgreSQL database dump complete
+--
+
