@@ -89,10 +89,7 @@
             out.print(objRetorno.toJSONString());
         } else if (cmd.equalsIgnoreCase("setscan")) {
 
-            String run_stop = request.getParameter("run_stop") != null ? request.getParameter("run_stop") : "";
-            Teste.setscan(Boolean.parseBoolean(run_stop));
 
-            objRetorno.put("ok", "Scan startado!");
 
             out.print(objRetorno.toJSONString());
         }

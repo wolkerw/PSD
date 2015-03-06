@@ -2,13 +2,16 @@
 <%@page import="com.HC_Lab_pessoa"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@page contentType="text/html; charset=UTF-8"%>
-<%//codeGenVersion 2.0.72%>
+<%//codeGenVersion 2.0.72
+
+if(session.getAttribute("usuario")!=null){
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="java.sql.Connection"%>
-<html>     
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-         <title>Lista pessoas</title>
+        <title>Lista pessoas</title>
 
         <script type="text/javascript" src="JavaScript/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="JavaScript/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
@@ -79,3 +82,9 @@
         
         
 </html>
+<%}else{%>
+	
+	Você não está logado
+	
+	
+<%} %>
