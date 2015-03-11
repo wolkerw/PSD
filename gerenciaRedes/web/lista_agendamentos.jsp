@@ -49,7 +49,7 @@ if(session.getAttribute("usuario")!=null){
 	}
 	
 	
-	lab.setFiltroIntervalo("1=1");
+	lab.setFiltroIntervalo("Coalesce(flag_staus,'O') = 'O' ");
 	
 	if(!errodata)
 		lab.setFiltroIntervalo(lab.getFiltroIntervalo() + "  AND Lab_agendamento.data_ini BETWEEN '"+ new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(dtIni) +"' AND '"+ new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(dtFim) +"' ");
