@@ -58,6 +58,7 @@
         objSIS_USUARIO.lista();
         
         if(objSIS_USUARIO.next()){
+        	objSIS_USUARIO.mapGetRsToSet(objSIS_USUARIO,objSIS_USUARIO);
           session.setAttribute("tipo",objSIS_USUARIO.getFlagtipo());
       	  session.setAttribute("usuario",new Long(objSIS_USUARIO.getCodpessoa()));
           session.setMaxInactiveInterval(1800);

@@ -1,4 +1,4 @@
-package com;
+package com.virtuallis;
 
 import java.sql.*;
 
@@ -42,6 +42,12 @@ public class Lab_agendamento extends DAOBase {
 	private boolean pNullFlagstaus=false;
 	private boolean pIgnoraNullFlagstaus=false;
 	private String pFlagstaus;
+	private boolean pNullFlagpresenca=false;
+	private boolean pIgnoraNullFlagpresenca=false;
+	private String pFlagpresenca;
+	private boolean pNullDescmotivo=false;
+	private boolean pIgnoraNullDescmotivo=false;
+	private String pDescmotivo;
     
     //flags de filtro:
 	private boolean bFiltraSeqagendametno;
@@ -51,6 +57,8 @@ public class Lab_agendamento extends DAOBase {
 	private boolean bFiltraDataini;
 	private boolean bFiltraDatafim;
 	private boolean bFiltraFlagstaus;
+	private boolean bFiltraFlagpresenca;
+	private boolean bFiltraDescmotivo;
 
 	//Campos do recordset
 	private Long prsSeqagendametno;
@@ -67,6 +75,10 @@ public class Lab_agendamento extends DAOBase {
 	private boolean prsNullDatafim;
 	private String prsFlagstaus;
 	private boolean prsNullFlagstaus;
+	private String prsFlagpresenca;
+	private boolean prsNullFlagpresenca;
+	private String prsDescmotivo;
+	private boolean prsNullDescmotivo;
 
 
 
@@ -81,6 +93,8 @@ public class Lab_agendamento extends DAOBase {
 	private java.util.Date pDatainiMin;
 	private java.util.Date pDatafimMin;
 	private String pFlagstausMin;
+	private String pFlagpresencaMin;
+	private String pDescmotivoMin;
     
     //flags de filtro:
 	private boolean bFiltraSeqagendametnoMin;
@@ -90,6 +104,8 @@ public class Lab_agendamento extends DAOBase {
 	private boolean bFiltraDatainiMin;
 	private boolean bFiltraDatafimMin;
 	private boolean bFiltraFlagstausMin;
+	private boolean bFiltraFlagpresencaMin;
+	private boolean bFiltraDescmotivoMin;
 	private long pSeqagendametnoMax;
 	private long pCodalunoMax;
 	private long pCodprofessorMax;
@@ -97,6 +113,8 @@ public class Lab_agendamento extends DAOBase {
 	private java.util.Date pDatainiMax;
 	private java.util.Date pDatafimMax;
 	private String pFlagstausMax;
+	private String pFlagpresencaMax;
+	private String pDescmotivoMax;
     
     //flags de filtro:
 	private boolean bFiltraSeqagendametnoMax;
@@ -106,11 +124,13 @@ public class Lab_agendamento extends DAOBase {
 	private boolean bFiltraDatainiMax;
 	private boolean bFiltraDatafimMax;
 	private boolean bFiltraFlagstausMax;
+	private boolean bFiltraFlagpresencaMax;
+	private boolean bFiltraDescmotivoMax;
     private boolean bFiltroIntervalo = false;
     private boolean bColunasSelect = false;
 
 
-    //mï¿½todos das propriedades
+    //métodos das propriedades
     public long getSeqagendametno(){
          return pSeqagendametno;
     }
@@ -237,8 +257,54 @@ public class Lab_agendamento extends DAOBase {
              bFiltraFlagstaus = true;
          }
     }
+    public String getFlagpresenca(){
+          return pFlagpresenca;
+    }
+ 
+    public void setNullFlagpresenca(boolean valor){
+        pNullFlagpresenca = valor;
+    }
+    public boolean getNullFlagpresenca(){
+        return pNullFlagpresenca;
+    }
+ 
+    public void setIgnoraFlagpresenca(boolean valor){
+        pIgnoraNullFlagpresenca = valor;
+    }
+ 
+    public void setFlagpresenca(String valor ) throws Exception {
+	     pFlagpresenca = valor;
+         if (valor == null){
+             bFiltraFlagpresenca = false;
+         } else {
+             bFiltraFlagpresenca = true;
+         }
+    }
+    public String getDescmotivo(){
+          return pDescmotivo;
+    }
+ 
+    public void setNullDescmotivo(boolean valor){
+        pNullDescmotivo = valor;
+    }
+    public boolean getNullDescmotivo(){
+        return pNullDescmotivo;
+    }
+ 
+    public void setIgnoraDescmotivo(boolean valor){
+        pIgnoraNullDescmotivo = valor;
+    }
+ 
+    public void setDescmotivo(String valor ) throws Exception {
+	     pDescmotivo = valor;
+         if (valor == null){
+             bFiltraDescmotivo = false;
+         } else {
+             bFiltraDescmotivo = true;
+         }
+    }
 
-    //mï¿½todos do ResultSet
+    //métodos do ResultSet
     public Long getRsSeqagendametno(){
           if (prsNullSeqagendametno) {
               return null;
@@ -295,7 +361,23 @@ public class Lab_agendamento extends DAOBase {
           }
     }
  
- //mï¿½todos das chaves estrangeiras, mapeamento
+    public String getRsFlagpresenca(){
+          if (prsNullFlagpresenca) {
+              return null;
+          } else {
+              return prsFlagpresenca;
+          }
+    }
+ 
+    public String getRsDescmotivo(){
+          if (prsNullDescmotivo) {
+              return null;
+          } else {
+              return prsDescmotivo;
+          }
+    }
+ 
+ //métodos das chaves estrangeiras, mapeamento
     public Lab_pessoa getObCodaluno() throws Exception{
       boolean blnPassouConexao = false;
         Lab_pessoa oFK = new Lab_pessoa();
@@ -387,7 +469,7 @@ public class Lab_agendamento extends DAOBase {
     }
  
 
-    //mï¿½todos das propriedades de filtro
+    //métodos das propriedades de filtro
     public long getSeqagendametnoMin(){
          return pSeqagendametnoMin;
     }
@@ -443,6 +525,22 @@ public class Lab_agendamento extends DAOBase {
     public void setFlagstausMin(String valor ){
 	     pFlagstausMin = valor;
          bFiltraFlagstausMin = true;
+    }
+    public String getFlagpresencaMin(){
+          return pFlagpresencaMin;
+    }
+ 
+    public void setFlagpresencaMin(String valor ){
+	     pFlagpresencaMin = valor;
+         bFiltraFlagpresencaMin = true;
+    }
+    public String getDescmotivoMin(){
+          return pDescmotivoMin;
+    }
+ 
+    public void setDescmotivoMin(String valor ){
+	     pDescmotivoMin = valor;
+         bFiltraDescmotivoMin = true;
     }
     public long getSeqagendametnoMax(){
          return pSeqagendametnoMax;
@@ -500,6 +598,22 @@ public class Lab_agendamento extends DAOBase {
 	     pFlagstausMax = valor;
          bFiltraFlagstausMax = true;
     }
+    public String getFlagpresencaMax(){
+          return pFlagpresencaMax;
+    }
+ 
+    public void setFlagpresencaMax(String valor ){
+	     pFlagpresencaMax = valor;
+         bFiltraFlagpresencaMax = true;
+    }
+    public String getDescmotivoMax(){
+          return pDescmotivoMax;
+    }
+ 
+    public void setDescmotivoMax(String valor ){
+	     pDescmotivoMax = valor;
+         bFiltraDescmotivoMax = true;
+    }
 
     public String insert() throws Exception {
         String strSql = new String("");
@@ -511,7 +625,7 @@ public class Lab_agendamento extends DAOBase {
  
         boolean isAutoCommit = false;
  
-        //geraï¿½ï¿½o da chave
+        //geração da chave
         if (!pBlnSetaPK){
             geraProxID();
         }
@@ -637,6 +751,42 @@ public class Lab_agendamento extends DAOBase {
                 }
                     strSql = strSql + "'" + pFlagstaus.replaceAll("'", "''")     + "'";
                     strgColunas = strgColunas + "flag_staus";
+                }
+     
+            }
+            if (pNullFlagpresenca){
+                if (strSql.compareTo("")!=0){
+                    strSql = strSql + ", ";
+                    strgColunas = strgColunas + ", ";
+                }
+                strSql = strSql + " NULL ";
+                strgColunas = strgColunas + "flag_presenca";
+            }else{
+                if (bFiltraFlagpresenca){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                        strgColunas = strgColunas + ", ";
+                }
+                    strSql = strSql + "'" + pFlagpresenca.replaceAll("'", "''")     + "'";
+                    strgColunas = strgColunas + "flag_presenca";
+                }
+     
+            }
+            if (pNullDescmotivo){
+                if (strSql.compareTo("")!=0){
+                    strSql = strSql + ", ";
+                    strgColunas = strgColunas + ", ";
+                }
+                strSql = strSql + " NULL ";
+                strgColunas = strgColunas + "desc_motivo";
+            }else{
+                if (bFiltraDescmotivo){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                        strgColunas = strgColunas + ", ";
+                }
+                    strSql = strSql + "'" + pDescmotivo.replaceAll("'", "''")     + "'";
+                    strgColunas = strgColunas + "desc_motivo";
                 }
      
             }
@@ -792,6 +942,44 @@ public class Lab_agendamento extends DAOBase {
                         strSql = strSql + ", ";
                     }
                     strSql = strSql + "flag_staus = NULL";
+                }
+            }
+ 
+            if (pNullFlagpresenca && !pIgnoraNullFlagpresenca){
+                if (strSql.compareTo("")!=0){
+                    strSql = strSql + ", ";
+                }
+                strSql = strSql + "flag_presenca = NULL";
+            }else{
+                if (bFiltraFlagpresenca){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                    }
+                     strSql = strSql + "flag_presenca = '" + pFlagpresenca.replaceAll("'", "''") + "'";
+                } else if (bUpdateNull){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                    }
+                    strSql = strSql + "flag_presenca = NULL";
+                }
+            }
+ 
+            if (pNullDescmotivo && !pIgnoraNullDescmotivo){
+                if (strSql.compareTo("")!=0){
+                    strSql = strSql + ", ";
+                }
+                strSql = strSql + "desc_motivo = NULL";
+            }else{
+                if (bFiltraDescmotivo){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                    }
+                     strSql = strSql + "desc_motivo = '" + pDescmotivo.replaceAll("'", "''") + "'";
+                } else if (bUpdateNull){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                    }
+                    strSql = strSql + "desc_motivo = NULL";
                 }
             }
  
@@ -957,6 +1145,20 @@ public class Lab_agendamento extends DAOBase {
             strWhere = strWhere + "lab_agendamento.flag_staus = '" + pFlagstaus.replaceAll("'", "''") + "'";
         }
  
+        if (bFiltraFlagpresenca) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_agendamento.flag_presenca = '" + pFlagpresenca.replaceAll("'", "''") + "'";
+        }
+ 
+        if (bFiltraDescmotivo) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_agendamento.desc_motivo = '" + pDescmotivo.replaceAll("'", "''") + "'";
+        }
+ 
         String strSQL = "SELECT ";
         strSQL = strSQL + colunasConsulta(tipo);
                 if (gJoin.compareTo("")==0){
@@ -1053,6 +1255,32 @@ public class Lab_agendamento extends DAOBase {
             }
             strWhere = strWhere + "lab_agendamento.data_fim <= '" + Utilitario.dateToStrSQL(pDatafimMax) + "'";
         }
+        if (bFiltraFlagpresencaMin) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_agendamento.flag_presenca >= '" + pFlagpresencaMin.replaceAll("'", "''") + "'";
+        }
+ 
+        if (bFiltraFlagpresencaMax) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_agendamento.flag_presenca <= '" + pFlagpresencaMax.replaceAll("'", "''") + "'";
+        }
+        if (bFiltraDescmotivoMin) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_agendamento.desc_motivo >= '" + pDescmotivoMin.replaceAll("'", "''") + "'";
+        }
+ 
+        if (bFiltraDescmotivoMax) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_agendamento.desc_motivo <= '" + pDescmotivoMax.replaceAll("'", "''") + "'";
+        }
         
         return strWhere;
         
@@ -1090,6 +1318,14 @@ public class Lab_agendamento extends DAOBase {
          if (origem.getRsFlagstaus()!=null){
                destino.setFlagstaus(origem.getRsFlagstaus());
              }
+        
+         if (origem.getRsFlagpresenca()!=null){
+               destino.setFlagpresenca(origem.getRsFlagpresenca());
+             }
+        
+         if (origem.getRsDescmotivo()!=null){
+               destino.setDescmotivo(origem.getRsDescmotivo());
+             }
     }
     public static void mapGetRsToSetDao(Lab_agendamento origem, Lab_agendamento destino) throws Exception{
         
@@ -1122,6 +1358,14 @@ public class Lab_agendamento extends DAOBase {
          if (origem.getRsFlagstaus()!=null){
                destino.setFlagstaus(origem.getRsFlagstaus());
              }
+        
+         if (origem.getRsFlagpresenca()!=null){
+               destino.setFlagpresenca(origem.getRsFlagpresenca());
+             }
+        
+         if (origem.getRsDescmotivo()!=null){
+               destino.setDescmotivo(origem.getRsDescmotivo());
+             }
     }
 
     public void limpaPropriedades() throws Exception {
@@ -1151,6 +1395,14 @@ public class Lab_agendamento extends DAOBase {
 	        pIgnoraNullFlagstaus=false;
         setFlagstaus(null);
         bFiltraFlagstaus = false;
+	        pNullFlagpresenca=false;
+	        pIgnoraNullFlagpresenca=false;
+        setFlagpresenca(null);
+        bFiltraFlagpresenca = false;
+	        pNullDescmotivo=false;
+	        pIgnoraNullDescmotivo=false;
+        setDescmotivo(null);
+        bFiltraDescmotivo = false;
         strFiltroIntervalo = "";
         bFiltroIntervalo = false;
         strColunasSelect = "";
@@ -1179,6 +1431,10 @@ public class Lab_agendamento extends DAOBase {
         bFiltraDatafimMin = false;
         setFlagstausMin(null);
         bFiltraFlagstausMin = false;
+        setFlagpresencaMin(null);
+        bFiltraFlagpresencaMin = false;
+        setDescmotivoMin(null);
+        bFiltraDescmotivoMin = false;
         setSeqagendametnoMax(0);
         bFiltraSeqagendametnoMax = false;
         setCodalunoMax(0);
@@ -1193,6 +1449,10 @@ public class Lab_agendamento extends DAOBase {
         bFiltraDatafimMax = false;
         setFlagstausMax(null);
         bFiltraFlagstausMax = false;
+        setFlagpresencaMax(null);
+        bFiltraFlagpresencaMax = false;
+        setDescmotivoMax(null);
+        bFiltraDescmotivoMax = false;
     }
 
      public void setInTransaction(boolean valor)
@@ -1348,6 +1608,8 @@ public class Lab_agendamento extends DAOBase {
         prsDataini = null;
         prsDatafim = null;
         prsFlagstaus = null;
+        prsFlagpresenca = null;
+        prsDescmotivo = null;
     }
 
     public boolean next(){
@@ -1416,6 +1678,20 @@ public class Lab_agendamento extends DAOBase {
          
         } 
          
+        try {
+             prsFlagpresenca = rs.getString("flag_presenca");
+             prsNullFlagpresenca = (rs.wasNull());
+        } catch (Exception e) {
+         
+        } 
+         
+        try {
+             prsDescmotivo = rs.getString("desc_motivo");
+             prsNullDescmotivo = (rs.wasNull());
+        } catch (Exception e) {
+         
+        } 
+         
     }
     
     public void geraProxID() throws Exception{
@@ -1479,7 +1755,9 @@ public class Lab_agendamento extends DAOBase {
                 strSQL = strSQL + "lab_agendamento.cod_assunto, " ;
                 strSQL = strSQL + "lab_agendamento.data_ini, " ;
                 strSQL = strSQL + "lab_agendamento.data_fim, " ;
-                strSQL = strSQL + "lab_agendamento.flag_staus" ;
+                strSQL = strSQL + "lab_agendamento.flag_staus, " ;
+                strSQL = strSQL + "lab_agendamento.flag_presenca, " ;
+                strSQL = strSQL + "lab_agendamento.desc_motivo" ;
            }
        } else {
            strSQL = strSQL + "COUNT(*) as numReg " ;
