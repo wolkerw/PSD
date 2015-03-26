@@ -1,4 +1,4 @@
-package com.virtuallis;
+package com;
 
 import java.sql.*;
 
@@ -45,6 +45,9 @@ public class Lab_pessoa extends DAOBase {
 	private boolean pNullFlagsituacao=false;
 	private boolean pIgnoraNullFlagsituacao=false;
 	private String pFlagsituacao;
+	private boolean pNullDescsenha=false;
+	private boolean pIgnoraNullDescsenha=false;
+	private String pDescsenha;
     
     //flags de filtro:
 	private boolean bFiltraCodpessoa;
@@ -55,6 +58,7 @@ public class Lab_pessoa extends DAOBase {
 	private boolean bFiltraFlagtipo;
 	private boolean bFiltraDescnome;
 	private boolean bFiltraFlagsituacao;
+	private boolean bFiltraDescsenha;
 
 	//Campos do recordset
 	private Long prsCodpessoa;
@@ -73,6 +77,8 @@ public class Lab_pessoa extends DAOBase {
 	private boolean prsNullDescnome;
 	private String prsFlagsituacao;
 	private boolean prsNullFlagsituacao;
+	private String prsDescsenha;
+	private boolean prsNullDescsenha;
 
 
 
@@ -88,6 +94,7 @@ public class Lab_pessoa extends DAOBase {
 	private String pFlagtipoMin;
 	private String pDescnomeMin;
 	private String pFlagsituacaoMin;
+	private String pDescsenhaMin;
     
     //flags de filtro:
 	private boolean bFiltraCodpessoaMin;
@@ -98,6 +105,7 @@ public class Lab_pessoa extends DAOBase {
 	private boolean bFiltraFlagtipoMin;
 	private boolean bFiltraDescnomeMin;
 	private boolean bFiltraFlagsituacaoMin;
+	private boolean bFiltraDescsenhaMin;
 	private long pCodpessoaMax;
 	private long pNummatriculaMax;
 	private long pCodcursoMax;
@@ -106,6 +114,7 @@ public class Lab_pessoa extends DAOBase {
 	private String pFlagtipoMax;
 	private String pDescnomeMax;
 	private String pFlagsituacaoMax;
+	private String pDescsenhaMax;
     
     //flags de filtro:
 	private boolean bFiltraCodpessoaMax;
@@ -116,11 +125,12 @@ public class Lab_pessoa extends DAOBase {
 	private boolean bFiltraFlagtipoMax;
 	private boolean bFiltraDescnomeMax;
 	private boolean bFiltraFlagsituacaoMax;
+	private boolean bFiltraDescsenhaMax;
     private boolean bFiltroIntervalo = false;
     private boolean bColunasSelect = false;
 
 
-    //métodos das propriedades
+    //mï¿½todos das propriedades
     public long getCodpessoa(){
          return pCodpessoa;
     }
@@ -282,8 +292,31 @@ public class Lab_pessoa extends DAOBase {
              bFiltraFlagsituacao = true;
          }
     }
+    public String getDescsenha(){
+          return pDescsenha;
+    }
+ 
+    public void setNullDescsenha(boolean valor){
+        pNullDescsenha = valor;
+    }
+    public boolean getNullDescsenha(){
+        return pNullDescsenha;
+    }
+ 
+    public void setIgnoraDescsenha(boolean valor){
+        pIgnoraNullDescsenha = valor;
+    }
+ 
+    public void setDescsenha(String valor ) throws Exception {
+	     pDescsenha = valor;
+         if (valor == null){
+             bFiltraDescsenha = false;
+         } else {
+             bFiltraDescsenha = true;
+         }
+    }
 
-    //métodos do ResultSet
+    //mï¿½todos do ResultSet
     public Long getRsCodpessoa(){
           if (prsNullCodpessoa) {
               return null;
@@ -348,7 +381,15 @@ public class Lab_pessoa extends DAOBase {
           }
     }
  
- //métodos das chaves estrangeiras, mapeamento
+    public String getRsDescsenha(){
+          if (prsNullDescsenha) {
+              return null;
+          } else {
+              return prsDescsenha;
+          }
+    }
+ 
+ //mï¿½todos das chaves estrangeiras, mapeamento
     public Lab_curso getObCodcurso() throws Exception{
       boolean blnPassouConexao = false;
         Lab_curso oFK = new Lab_curso();
@@ -380,7 +421,7 @@ public class Lab_pessoa extends DAOBase {
     }
  
 
-    //métodos das propriedades de filtro
+    //mï¿½todos das propriedades de filtro
     public long getCodpessoaMin(){
          return pCodpessoaMin;
     }
@@ -444,6 +485,14 @@ public class Lab_pessoa extends DAOBase {
     public void setFlagsituacaoMin(String valor ){
 	     pFlagsituacaoMin = valor;
          bFiltraFlagsituacaoMin = true;
+    }
+    public String getDescsenhaMin(){
+          return pDescsenhaMin;
+    }
+ 
+    public void setDescsenhaMin(String valor ){
+	     pDescsenhaMin = valor;
+         bFiltraDescsenhaMin = true;
     }
     public long getCodpessoaMax(){
          return pCodpessoaMax;
@@ -509,6 +558,14 @@ public class Lab_pessoa extends DAOBase {
 	     pFlagsituacaoMax = valor;
          bFiltraFlagsituacaoMax = true;
     }
+    public String getDescsenhaMax(){
+          return pDescsenhaMax;
+    }
+ 
+    public void setDescsenhaMax(String valor ){
+	     pDescsenhaMax = valor;
+         bFiltraDescsenhaMax = true;
+    }
 
     public String insert() throws Exception {
         String strSql = new String("");
@@ -520,7 +577,7 @@ public class Lab_pessoa extends DAOBase {
  
         boolean isAutoCommit = false;
  
-        //geração da chave
+        //geraï¿½ï¿½o da chave
         if (!pBlnSetaPK){
             geraProxID();
         }
@@ -664,6 +721,24 @@ public class Lab_pessoa extends DAOBase {
                 }
                     strSql = strSql + "'" + pFlagsituacao.replaceAll("'", "''")     + "'";
                     strgColunas = strgColunas + "flag_situacao";
+                }
+     
+            }
+            if (pNullDescsenha){
+                if (strSql.compareTo("")!=0){
+                    strSql = strSql + ", ";
+                    strgColunas = strgColunas + ", ";
+                }
+                strSql = strSql + " NULL ";
+                strgColunas = strgColunas + "desc_senha";
+            }else{
+                if (bFiltraDescsenha){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                        strgColunas = strgColunas + ", ";
+                }
+                    strSql = strSql + "'" + pDescsenha.replaceAll("'", "''")     + "'";
+                    strgColunas = strgColunas + "desc_senha";
                 }
      
             }
@@ -841,6 +916,25 @@ public class Lab_pessoa extends DAOBase {
                 }
             }
  
+            if (pNullDescsenha && !pIgnoraNullDescsenha){
+                if (strSql.compareTo("")!=0){
+                    strSql = strSql + ", ";
+                }
+                strSql = strSql + "desc_senha = NULL";
+            }else{
+                if (bFiltraDescsenha){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                    }
+                     strSql = strSql + "desc_senha = '" + pDescsenha.replaceAll("'", "''") + "'";
+                } else if (bUpdateNull){
+                    if (strSql.compareTo("")!=0){
+                        strSql = strSql + ", ";
+                    }
+                    strSql = strSql + "desc_senha = NULL";
+                }
+            }
+ 
             
             //Monta chave para o update
             if (bFiltraCodpessoa){
@@ -1010,6 +1104,13 @@ public class Lab_pessoa extends DAOBase {
             strWhere = strWhere + "lab_pessoa.flag_situacao = '" + pFlagsituacao.replaceAll("'", "''") + "'";
         }
  
+        if (bFiltraDescsenha) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_pessoa.desc_senha = '" + pDescsenha.replaceAll("'", "''") + "'";
+        }
+ 
         String strSQL = "SELECT ";
         strSQL = strSQL + colunasConsulta(tipo);
                 if (gJoin.compareTo("")==0){
@@ -1142,6 +1243,19 @@ public class Lab_pessoa extends DAOBase {
             }
             strWhere = strWhere + "lab_pessoa.flag_situacao <= '" + pFlagsituacaoMax.replaceAll("'", "''") + "'";
         }
+        if (bFiltraDescsenhaMin) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_pessoa.desc_senha >= '" + pDescsenhaMin.replaceAll("'", "''") + "'";
+        }
+ 
+        if (bFiltraDescsenhaMax) {
+            if (strWhere.trim().compareTo("")!= 0){
+                strWhere = strWhere + " AND ";
+            }
+            strWhere = strWhere + "lab_pessoa.desc_senha <= '" + pDescsenhaMax.replaceAll("'", "''") + "'";
+        }
         
         return strWhere;
         
@@ -1183,6 +1297,10 @@ public class Lab_pessoa extends DAOBase {
          if (origem.getRsFlagsituacao()!=null){
                destino.setFlagsituacao(origem.getRsFlagsituacao());
              }
+        
+         if (origem.getRsDescsenha()!=null){
+               destino.setDescsenha(origem.getRsDescsenha());
+             }
     }
     public static void mapGetRsToSetDao(Lab_pessoa origem, Lab_pessoa destino) throws Exception{
         
@@ -1219,6 +1337,10 @@ public class Lab_pessoa extends DAOBase {
          if (origem.getRsFlagsituacao()!=null){
                destino.setFlagsituacao(origem.getRsFlagsituacao());
              }
+        
+         if (origem.getRsDescsenha()!=null){
+               destino.setDescsenha(origem.getRsDescsenha());
+             }
     }
 
     public void limpaPropriedades() throws Exception {
@@ -1252,6 +1374,10 @@ public class Lab_pessoa extends DAOBase {
 	        pIgnoraNullFlagsituacao=false;
         setFlagsituacao(null);
         bFiltraFlagsituacao = false;
+	        pNullDescsenha=false;
+	        pIgnoraNullDescsenha=false;
+        setDescsenha(null);
+        bFiltraDescsenha = false;
         strFiltroIntervalo = "";
         bFiltroIntervalo = false;
         strColunasSelect = "";
@@ -1282,6 +1408,8 @@ public class Lab_pessoa extends DAOBase {
         bFiltraDescnomeMin = false;
         setFlagsituacaoMin(null);
         bFiltraFlagsituacaoMin = false;
+        setDescsenhaMin(null);
+        bFiltraDescsenhaMin = false;
         setCodpessoaMax(0);
         bFiltraCodpessoaMax = false;
         setNummatriculaMax(0);
@@ -1298,6 +1426,8 @@ public class Lab_pessoa extends DAOBase {
         bFiltraDescnomeMax = false;
         setFlagsituacaoMax(null);
         bFiltraFlagsituacaoMax = false;
+        setDescsenhaMax(null);
+        bFiltraDescsenhaMax = false;
     }
 
      public void setInTransaction(boolean valor)
@@ -1454,6 +1584,7 @@ public class Lab_pessoa extends DAOBase {
         prsFlagtipo = null;
         prsDescnome = null;
         prsFlagsituacao = null;
+        prsDescsenha = null;
     }
 
     public boolean next(){
@@ -1529,6 +1660,13 @@ public class Lab_pessoa extends DAOBase {
          
         } 
          
+        try {
+             prsDescsenha = rs.getString("desc_senha");
+             prsNullDescsenha = (rs.wasNull());
+        } catch (Exception e) {
+         
+        } 
+         
     }
     
     public void geraProxID() throws Exception{
@@ -1593,7 +1731,8 @@ public class Lab_pessoa extends DAOBase {
                 strSQL = strSQL + "lab_pessoa.desc_email, " ;
                 strSQL = strSQL + "lab_pessoa.flag_tipo, " ;
                 strSQL = strSQL + "lab_pessoa.desc_nome, " ;
-                strSQL = strSQL + "lab_pessoa.flag_situacao" ;
+                strSQL = strSQL + "lab_pessoa.flag_situacao, " ;
+                strSQL = strSQL + "lab_pessoa.desc_senha" ;
            }
        } else {
            strSQL = strSQL + "COUNT(*) as numReg " ;

@@ -1,4 +1,4 @@
-package com.virtuallis;
+package com;
 
 import java.sql.*;
 
@@ -130,7 +130,7 @@ public class Lab_agendamento extends DAOBase {
     private boolean bColunasSelect = false;
 
 
-    //métodos das propriedades
+    //mï¿½todos das propriedades
     public long getSeqagendametno(){
          return pSeqagendametno;
     }
@@ -304,7 +304,7 @@ public class Lab_agendamento extends DAOBase {
          }
     }
 
-    //métodos do ResultSet
+    //mï¿½todos do ResultSet
     public Long getRsSeqagendametno(){
           if (prsNullSeqagendametno) {
               return null;
@@ -377,7 +377,7 @@ public class Lab_agendamento extends DAOBase {
           }
     }
  
- //métodos das chaves estrangeiras, mapeamento
+ //mï¿½todos das chaves estrangeiras, mapeamento
     public Lab_pessoa getObCodaluno() throws Exception{
       boolean blnPassouConexao = false;
         Lab_pessoa oFK = new Lab_pessoa();
@@ -469,7 +469,7 @@ public class Lab_agendamento extends DAOBase {
     }
  
 
-    //métodos das propriedades de filtro
+    //mï¿½todos das propriedades de filtro
     public long getSeqagendametnoMin(){
          return pSeqagendametnoMin;
     }
@@ -625,7 +625,7 @@ public class Lab_agendamento extends DAOBase {
  
         boolean isAutoCommit = false;
  
-        //geração da chave
+        //geraï¿½ï¿½o da chave
         if (!pBlnSetaPK){
             geraProxID();
         }
