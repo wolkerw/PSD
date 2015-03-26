@@ -71,7 +71,7 @@ public final class DBSettings implements Serializable{
 	//o que importa
     public static Connection getConexao() throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/sistemalab", "postgres", "affsd");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/trab", "postgres", "sti");
     }
 
 	
