@@ -46,6 +46,7 @@
 	if (new File(application.getRealPath("/img/logo_teste.jpg"))
 			.exists()) {
 		strLogo = "logo_teste.jpg";
+		// teste commit
 	}
 %>
 </head>
