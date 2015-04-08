@@ -20,8 +20,10 @@ if(session.getAttribute("usuario")!=null){
 	
 	String matricula = request.getParameter("num_matricula") == null?"":request.getParameter("num_matricula").trim();
 	String data_ini = request.getParameter("data_ini") == null?"":request.getParameter("data_ini").trim();
+	String data_fim = request.getParameter("data_fim") == null?"":request.getParameter("data_fim").trim();
 	String hora_ini = request.getParameter("hora_ini") == null?"":request.getParameter("hora_ini").trim();
 	String cod_assunto = request.getParameter("cod_assunto") == null?"":request.getParameter("cod_assunto").trim();
+	String cod_professor = request.getParameter("cod_professor") == null?"":request.getParameter("cod_professor").trim();
 	String okcancelado = request.getParameter("okcancelado") == null?"":request.getParameter("okcancelado").trim();
 	
 	if(!cod_assunto.equalsIgnoreCase("")){
@@ -40,6 +42,7 @@ if(session.getAttribute("usuario")!=null){
 	if(session.getAttribute("tipo").toString().equalsIgnoreCase("AL")){
 		lab.setCodaluno(Long.parseLong(session.getAttribute("usuario").toString()));
 	};
+	
 	
 	ResultSet rs = null;
 	//lab.lista();
@@ -174,16 +177,24 @@ function isNumberKey(evt)
 
 function validaCampos(tipo){
 	var data_ini = forme.data_ini.value;
+	var data_fim = forme.data_fim.value;
 	var hora_ini = forme.hora_ini.value;
 	var cod_assunto = forme.cod_assunto.value;
 	
 	if (data_ini == ""){
-		alert('Informe a data!');
+		alert('Informe a data inicial!');
 		forme.data_ini.focus();
 		return false;
 	}
 	
 	if (tipo == "2"){
+		
+		if (data_fim == ""){
+			alert('Informe a data final!');
+			forme.data_ini.focus();
+			return false;
+		}
+		
 		if (hora_ini == ""){
 			alert('Informe a hora!');
 			forme.hora_ini.focus();
@@ -218,7 +229,11 @@ function validaCampos(tipo){
 		           <% }%>
 		           
 		           <div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">                
-		           		   	  <strong>Data :</strong><br> &nbsp;<input class="data glowing-border" style="WIDTH: 80%" id="data_ini" name="data_ini" type="text" maxlength="100" value="<%=data_ini %>">
+		           		   	  <strong>Data Inicial:</strong><br> &nbsp;<input class="data glowing-border" style="WIDTH: 80%" id="data_ini" name="data_ini" type="text" maxlength="100" value="<%=data_ini %>">
+		           </div>
+            
+            	   <div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">                
+		           		   	  <strong>Data Final:</strong><br> &nbsp;<input class="data glowing-border" style="WIDTH: 80%" id="data_fim" name="data_fim" type="text" maxlength="100" value="<%=data_fim %>">
 		           </div>
             
 	               <div class="col-xs-3col-sm-3 col-md-3 col-lg-3">  
@@ -261,8 +276,30 @@ function validaCampos(tipo){
 		           		   	  
 		           </div>
 		           
+		           
 		     </div> 
 		   <div class="row">  
+            
+            
+                    <div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">
+		                     
+		           		   	  <strong>Professor:</strong><br> &nbsp;
+		           		   	  <%HC_Lab_pessoa professor = new HC_Lab_pessoa();
+		           		   	   professor.setConnexao(conn);
+		           		   	   professor.setInTransaction(true);
+		           		   	   professor.setFlagtipo("PF");
+		           		   	   professor.setOrderBy("desc_nome");		           		   	   
+		           		   	   professor.lista();
+		           		   	  %>
+		           		   	  
+		           		   	  <select class="glowing-border" style="WIDTH: 80%" id="cod_professor" name="cod_professor" type="text" maxlength="100" >  
+		           		   	  <option value="">Escolha o professor:</option>
+		           		   	  <%while(professor.next()){%>
+		           		   		  <option value="<%=professor.getRsCodpessoa() %>" <%=cod_professor.equals(Long.toString(professor.getRsCodpessoa()))?"selected='selected'":"" %>>  <%=professor.getRsDescnome() %></option>
+		           		   	  <% }%>
+		           		   	  </select>
+		           		   	  
+		           </div>
             
               		<div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">       
               			<br>         
@@ -302,6 +339,10 @@ function validaCampos(tipo){
                         <tbody>
                         <%
                         while((rs!=null) && (rs.next())){
+                        	if ((Integer.parseInt(rs.getString("hora")) > 6) && ((Integer.parseInt(rs.getString("hora")) < 12)) 
+                        			|| (Integer.parseInt(rs.getString("hora")) > 12) && ((Integer.parseInt(rs.getString("hora")) < 18)) 
+                            		|| (Integer.parseInt(rs.getString("hora")) > 18) && ((Integer.parseInt(rs.getString("hora")) < 22))                            	 
+                        			){
                         %>
                         	<tr>
                         	    <td style="text-align: center; width: 10%" ><%=rs.getString("hora")+":00" %></td>
@@ -313,7 +354,7 @@ function validaCampos(tipo){
 								<td style="text-align: center; width: 15%" ><%=rs.getInt("sabado") %></td>
                         	</tr>
 
-                        <%}
+                        <%}}
                         conn.close();
                         %>
                         
