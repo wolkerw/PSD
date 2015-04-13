@@ -29,6 +29,8 @@ if(session.getAttribute("usuario")!=null){
 	String data_ini = request.getParameter("data_ini") == null?"":request.getParameter("data_ini").trim();
 	String cod_assunto = request.getParameter("cod_assunto") == null?"":request.getParameter("cod_assunto").trim();
 	String okcancelado = request.getParameter("okcancelado") == null?"":request.getParameter("okcancelado").trim();
+	String checkmodo = request.getParameter("checkmodo") == null?"N":"S";
+	
 	
 	if(!cod_assunto.equalsIgnoreCase("")){
 		lab.setCodassunto(Integer.parseInt(cod_assunto));
@@ -68,6 +70,11 @@ if(session.getAttribute("usuario")!=null){
 	if(session.getAttribute("tipo").toString().equalsIgnoreCase("AL")){
 		lab.setCodaluno(Long.parseLong(session.getAttribute("usuario").toString()));
 	};
+	
+	if(checkmodo.equalsIgnoreCase("S")){
+		lab.setFiltroIntervalo(lab.getFiltroIntervalo() + " and data_ini  >= '" +  new SimpleDateFormat("yyyyMMdd ").format(new Date())+"' ");
+		lab.setOrderBy("data_ini asc");
+	}
 	
 	lab.lista();
 	
@@ -248,6 +255,12 @@ function isNumberKey(evt)
             
            		 	<div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">                
 		           		   	  <strong>Período - Data final :</strong><br> &nbsp;<input class="data glowing-border" style="WIDTH: 80%" id="data_fim" name="data_fim" type="text" maxlength="100">
+		           </div>
+            
+            
+             <div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">       
+              <br>         
+		           		   <strong>Modo relatório:</strong> &nbsp;<input title="Lista os registros somente apartir da data atual e em ordem crescente."   id="checkmodo" name="checkmodo" type="checkbox" >
 		           </div>
             
             
