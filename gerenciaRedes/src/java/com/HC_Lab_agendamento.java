@@ -261,7 +261,7 @@ public class HC_Lab_agendamento extends Lab_agendamento{
     
     
     
-    public static void insereAgendamento(long codpessoa, long codprof, long codassunto, String dataini, String datafim, int horaini) throws Exception{
+    public static String insereAgendamento(long codpessoa, long codprof, long codassunto, String dataini, String datafim, int horaini) throws Exception{
     	Connection conn = null;
     try {
     	conn = DBSettings.getConexao();
@@ -336,17 +336,19 @@ public class HC_Lab_agendamento extends Lab_agendamento{
     	
     	conn.commit();
 	} catch (Exception e) {
-		e.printStackTrace();
-		conn.rollback();
+		e.printStackTrace();		
+		conn.rollback();		
 		try {
-			conn.close()	;
+			conn.close();
+			return e.toString();
 		} catch (Exception e2) {
+			return e2.toString();
 		}
 		
 		
 	}
     	
-    	
+    	return "";
     	
     	
     }
