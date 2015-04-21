@@ -5,6 +5,10 @@
 <%@page import="com.DBSettings"%>
 <%@page import="com.HC_Lab_pessoa"%>
 <%@page import="java.sql.ResultSet"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.GregorianCalendar"%>
+
 <%@ page pageEncoding="UTF-8"%>
 <%@page contentType="text/html; charset=UTF-8"%>
 <%//codeGenVersion 2.0.72
@@ -113,9 +117,37 @@ $(document).ready(function() {
 
 	$("#incluir").button().click(function(){
 		var form = document.getElementById('forme');
-		form.action="cad_agendamento.jsp";
+		form.action="frmCad_agendamento.jsp";
 		form.submit();
 	});	
+	
+	$("#voltar").button().click(function(){
+		var form = document.getElementById('forme');
+		form.data_ini.value = "07/03/2015";
+		form.action="cad_agendamento.jsp";
+		/*
+		var data_ini = forme.data_ini.value;
+		data_ini
+		var time = new Date('2014-03-14T23:54:00');
+		var outraData = new Date();
+		outraData.setDate(time.getDate() + 3); // Adiciona 3 dias
+		*/
+		form.submit();
+	});
+	
+	$("#avancar").button().click(function(){
+		var form = document.getElementById('forme');
+		form.data_ini.value = "12/03/2015";
+		form.action="cad_agendamento.jsp";
+		/*
+		var data_ini = forme.data_ini.value;
+		data_ini
+		var time = new Date('2014-03-14T23:54:00');
+		var outraData = new Date();
+		outraData.setDate(time.getDate() + 3); // Adiciona 3 dias
+		*/
+		form.submit();
+	});
 	
 	$( ".data" ).datepicker();
 	$(".ui-datepicker-trigger").css('position', 'relative');
@@ -321,19 +353,47 @@ function validaCampos(tipo){
             
             <br>
             <div class="row">
-                <div id="divTab" class="bs-example"  style="height: 750px;  overflow-y: scroll;">
+                <div id="divTab" class="bs-example"  style="height: 750px;  overflow-y: scroll;">                	
                     <table id="maquinasTab" class="table  header-fixed  table-striped table-bordered table-hover ">
                        <thead class="header">
-                       <% if (rs!=null) { %>
+                       <% if (rs!=null) { 
+                       
+                    	   Calendar c = new GregorianCalendar();  
+                           c.setTime(dtIni);                             
+                           int dia = c.get(c.DAY_OF_WEEK);
+                           c.add(Calendar.DATE, -1);
+                           
+                           Date base = new SimpleDateFormat("dd/MM/yyyy").parse(data_ini);
+                       	   GregorianCalendar diaSemana = new GregorianCalendar();
+                       	   diaSemana.setTime(base);
+                       	   diaSemana.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                       	   String segunda = new SimpleDateFormat("dd/MM/yyyy").format(diaSemana.getTime());
+                       	   diaSemana.setTime(base);
+                       	   diaSemana.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                    	   String terca = new SimpleDateFormat("dd/MM/yyyy").format(diaSemana.getTime());
+                    	   diaSemana.setTime(base);
+                       	   diaSemana.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                    	   String quarta = new SimpleDateFormat("dd/MM/yyyy").format(diaSemana.getTime());
+                    	   diaSemana.setTime(base);
+                       	   diaSemana.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                    	   String quinta = new SimpleDateFormat("dd/MM/yyyy").format(diaSemana.getTime());
+                    	   diaSemana.setTime(base);
+                       	   diaSemana.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                    	   String sexta = new SimpleDateFormat("dd/MM/yyyy").format(diaSemana.getTime());
+                    	   diaSemana.setTime(base);
+                       	   diaSemana.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                    	   String sabado = new SimpleDateFormat("dd/MM/yyyy").format(diaSemana.getTime());
+                       %>
                             <tr>
-                                <th style="text-align: center; width: 10%">Hora:</th>
-                                <th style="text-align: center; width: 15%">Segunda</th>
-                                <th style="text-align: center; width: 15%">Terça</th>
-                                <th style="text-align: center; width: 15%">Quarta</th>
-                                <th style="text-align: center; width: 15%">Quinta</th>
-                                <th style="text-align: center; width: 15%">Sexta</th>
-                                <th style="text-align: center; width: 15%">Sábado</th>
-                            </tr>
+		        				<th style="text-align: center; width: 5%"><button class="btn btn-primary" id="voltar" onclick=""><</button></th>
+                                <th style="text-align: center; width: 8%">Hora:</th>
+                                <th style="text-align: center; width: 15%">Segunda <br><%=segunda %></th>
+                                <th style="text-align: center; width: 14%">Terça <br><%=terca %></th>
+                                <th style="text-align: center; width: 15%">Quarta <br><%=quarta %></th>
+                                <th style="text-align: center; width: 15%">Quinta <br><%=quinta %></th>
+                                <th style="text-align: center; width: 14%">Sexta <br><%=sexta %></th>
+                                <th style="text-align: center; width: 15%">Sábado <br> <%=sabado %></th>
+		        				<th style="text-align: center; width: 5%"><button class="btn btn-primary" id="avancar" onclick="">></button></th>                            </tr>
                         <% } %>
                         </thead>
                         <tbody>
@@ -345,13 +405,15 @@ function validaCampos(tipo){
                         			){
                         %>
                         	<tr>
-                        	    <td style="text-align: center; width: 10%" ><%=rs.getString("hora")+":00" %></td>
+                        	    <td style="text-align: center; width: 5%" ></td>
+                        	    <td style="text-align: center; width: 8%" ><%=rs.getString("hora")+":00" %></td>
 								<td style="text-align: center; width: 15%" ><%=rs.getInt("segunda") %></td>
-								<td style="text-align: center; width: 15%" ><%=rs.getInt("terca") %></td>
+								<td style="text-align: center; width: 14%" ><%=rs.getInt("terca") %></td>
 								<td style="text-align: center; width: 15%" ><%=rs.getInt("quarta") %></td>
 								<td style="text-align: center; width: 15%" ><%=rs.getInt("quinta") %></td>
-								<td style="text-align: center; width: 15%" ><%=rs.getInt("sexta") %></td>
+								<td style="text-align: center; width: 14%" ><%=rs.getInt("sexta") %></td>
 								<td style="text-align: center; width: 15%" ><%=rs.getInt("sabado") %></td>
+								<td style="text-align: center; width: 5%" ></td>
                         	</tr>
 
                         <%}}
