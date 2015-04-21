@@ -54,7 +54,48 @@
 		
 			objRetorno.put("ok", "ok");
 			out.print(objRetorno.toJSONString());
+	} else	if (cmd.equalsIgnoreCase("carregapresenca")) { 
+
+		String agend = request.getParameter("seqagend") == null ? "" : request.getParameter("seqagend").trim() ;
+
+		HC_Lab_agendamento agendamento = new HC_Lab_agendamento();
+		agendamento.setConnexao(conn);
+		agendamento.setInTransaction(true);
+		agendamento.setSeqagendametno(Integer.parseInt(agend));
+		agendamento.lista();
+		if(agendamento.next()){
+			objRetorno.put("seq_agendamento", agendamento.getRsSeqagendametno());
+			objRetorno.put("flag_presenca",agendamento.getRsFlagpresenca()==null?"A": agendamento.getRsFlagpresenca());
+			objRetorno.put("motivo", agendamento.getRsDescmotivo()==null?"":agendamento.getRsDescmotivo());
+		};
+	
+		objRetorno.put("ok", "ok");
+		out.print(objRetorno.toJSONString());
 	}		
+	
+	else	if (cmd.equalsIgnoreCase("salvar")) {  
+
+		String agend = request.getParameter("seqagend") == null ? "" : request.getParameter("seqagend").trim() ;
+		String desc_motivo = request.getParameter("desc_motivo") == null ? "" : request.getParameter("desc_motivo").trim() ;
+		String presen = request.getParameter("presen") == null ? "" : request.getParameter("presen").trim() ;
+
+		HC_Lab_agendamento agendamento = new HC_Lab_agendamento();
+		agendamento.setConnexao(conn);
+		agendamento.setInTransaction(true);
+		agendamento.setSeqagendametno(Integer.parseInt(agend));
+		agendamento.lista();
+		if(agendamento.next()){
+	
+			agendamento.mapGetRsToSet(agendamento,agendamento);
+			agendamento.setFlagpresenca(presen);
+			agendamento.setDescmotivo(desc_motivo);
+			agendamento.update();
+		};
+	
+		objRetorno.put("ok", "ok");
+		out.print(objRetorno.toJSONString());
+	}
+	
 	
 		conn.commit();
 		

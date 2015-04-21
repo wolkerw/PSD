@@ -29,7 +29,10 @@ if(session.getAttribute("usuario")!=null){
 	String data_ini = request.getParameter("data_ini") == null?"":request.getParameter("data_ini").trim();
 	String cod_assunto = request.getParameter("cod_assunto") == null?"":request.getParameter("cod_assunto").trim();
 	String okcancelado = request.getParameter("okcancelado") == null?"":request.getParameter("okcancelado").trim();
+	String flagpresenca = request.getParameter("flagpresenca") == null?"":request.getParameter("flagpresenca").trim();
 	String checkmodo = request.getParameter("checkmodo") == null?"N":"S";
+	
+	
 	
 	
 	if(!cod_assunto.equalsIgnoreCase("")){
@@ -67,6 +70,18 @@ if(session.getAttribute("usuario")!=null){
 		lab.setFiltroIntervalo(lab.getFiltroIntervalo() + " and lab_pessoa.num_matricula = " +  matricula );
 	}
 	
+	if(!flagpresenca.equalsIgnoreCase("")){
+	
+		if(flagpresenca.equalsIgnoreCase("A")){
+			lab.setFiltroIntervalo(lab.getFiltroIntervalo() + " and Coalesce(flag_presenca,'A') = 'A' and  Coalesce(flag_staus,'O') = 'O'  ");		
+		} else if(flagpresenca.equalsIgnoreCase("S")){
+			lab.setFiltroIntervalo(lab.getFiltroIntervalo() + " and flag_presenca = 'S' and  Coalesce(flag_staus,'O') = 'O'");
+		} else if(flagpresenca.equalsIgnoreCase("N")){
+			lab.setFiltroIntervalo(lab.getFiltroIntervalo() + " and flag_presenca = 'N' and  Coalesce(flag_staus,'O') = 'O' ");
+		}
+		
+	}
+	
 	if(session.getAttribute("tipo").toString().equalsIgnoreCase("AL")){
 		lab.setCodaluno(Long.parseLong(session.getAttribute("usuario").toString()));
 	};
@@ -76,6 +91,8 @@ if(session.getAttribute("usuario")!=null){
 		lab.setOrderBy("data_ini asc");
 	}
 	
+	
+	lab.setTop("1000");
 	lab.lista();
 	
 	
@@ -147,7 +164,7 @@ $(document).ready(function() {
 	$(".ui-datepicker-trigger").css('left', '1px');
 	$(".data").mask("99/99/9999");
     
-	$(".sys_remove").button().click(function(){
+	$(".sys_cancela").button().click(function(){
 		$.blockUI({ message: 'Cancelado agendamento...' });
 			cancelaAgendamento($(this).attr("seqagend"));
 	 	$.unblockUI();
@@ -155,7 +172,124 @@ $(document).ready(function() {
 		
 	});
 	
+		
+	$(".sys_presenca").button().click(function(){
+	   $("#div_presenca").dialog("open");
+	   
+	   carregaPresenca($(this).attr("seqagend"));
+		return false;
+	});
+	
+	
+	$('#div_presenca').dialog({
+		height : 500,
+		width : 650,
+		title : 'Presença',
+		zIndex : 500,
+		autoOpen : false,
+		modal : true,
+		 closeOnEscape: true,
+		   open: function(event, ui) {
+					
+			   
+			
+			 $(this).parent().children().children(".ui-dialog-titlebar-close").hide();
+    	},
+		position : [ 'center', 'center' ],
+		buttons:{
+			
+		 "Cancelar": function(){
+	  	         $("#div_presenca").dialog("close");		
+ 	     },
+ 	     "Salvar": function(){
+ 	    	 
+ 	    	salvar();
+ 	    	 
+ 	    	    $("#seq_agendamento").val("");
+				$("#desc_motivo").val("");
+				$("input[name='opc_presen'][value='A']").prop('checked', true);
+ 	       	     $("#div_presenca").dialog("close");		
+     	  }
+
+		}
+})	;
+	
+	
+	
+	
 });
+
+
+function carregaPresenca(seqagend){
+	
+	$.ajax({
+	      type: "POST",                                                                                          
+	      url: "lista_agendamentos_ajax.jsp",
+	      dataType: "json",         
+	      async: true, 
+	      data: { cmd: 'carregapresenca',seqagend:seqagend
+	      },
+	      success:function (data) {
+	    	  
+	    	  if(data.msg!=undefined){
+	    		 	 alert( "Erro: " + data.msg );
+	    		 	 
+		      }else{
+					
+		    	    $("#seq_agendamento").val(data.seq_agendamento);
+					$("#desc_motivo").val(data.motivo);
+					$("input[name='opc_presen'][value='" + data.flag_presenca + "']").prop('checked', true);
+		    	  
+		      }
+	    	  
+	      $.unblockUI();
+	      },
+	      error: function(msg){
+	    	$.unblockUI();
+	        alert( "Erro: " + msg.msg );
+	      }
+	   });
+	
+	
+}
+
+function salvar(){
+	
+var seqagend =    $("#seq_agendamento").val();
+var desc_motivo = 	$("#desc_motivo").val();
+var presen =$("input[name='opc_presen']:checked").val() 
+	
+	$.ajax({
+	      type: "POST",                                                                                          
+	      url: "lista_agendamentos_ajax.jsp",
+	      dataType: "json",         
+	      async: true, 
+	      data: { cmd: 'salvar',
+	    	  seqagend:seqagend,
+	    	  desc_motivo:desc_motivo,
+	    	  presen:presen
+	    	  
+	      },
+	      success:function (data) {
+	    	  if(data.msg!=undefined){
+	    		 	 alert( "Erro: " + data.msg );
+	    		 	 
+		      }else{
+					  alert('Dados salvos!');
+					  location.reload(true); 
+		      }
+	    	  
+	      $.unblockUI();
+	      },
+	      error: function(msg){
+	    	$.unblockUI();
+	        alert( "Erro: " + msg.msg );
+	      }
+});
+
+
+} 
+
 
 
 function cancelaAgendamento(seqagend){
@@ -223,6 +357,7 @@ function isNumberKey(evt)
 		           		   	   assuntos.setConnexao(conn);
 		           		   	   assuntos.setInTransaction(true);
 		           		   	   assuntos.setOrderBy("desc_assunto");
+		           		   	   
 		           		   	   assuntos.lista();
 		           		   	  %>
 		           		   	  
@@ -247,6 +382,19 @@ function isNumberKey(evt)
 		           
 		           </div>
 		         
+		           
+		               <div class="col-xs-3col-sm-3 col-md-3 col-lg-3">  
+		           
+		       				   <strong >Presença:</strong><br>
+		       				    <select style="width: 80%" id="okcancelado" name="flagpresenca"" class="glowing-border" >
+		       				    <option value=""></option>
+		       				    <option value="A">Em aberto</option>
+		       				    <option value="S">Presente</option>
+		       				    <option value="N">Ausente</option>
+		       				    </select>
+		           
+		           </div>
+		         
 		     </div> 
 		   <div class="row">  
 		           <div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">                
@@ -266,7 +414,7 @@ function isNumberKey(evt)
             
               <div class="col-xs-5 col-sm-5 col-md-3 col-lg-3">       
               <br>         
-		           		   	 <button class="btn btn-primary" id="filtrar">Filtrar</button>
+		           		   	 <button class="btn btn-primary" title="" id="filtrar">Filtrar</button>
 		           </div>
             </div>
             
@@ -279,15 +427,19 @@ function isNumberKey(evt)
             <br>
             <div class="row">
                 <div id="divTab" class="bs-example"  style="height: 750px;  overflow-y: scroll;">
-                    <table id="maquinasTab" class="table  header-fixed  table-striped table-bordered table-hover ">
+                <strong>Máximo de 1000 registros serão listados.</strong>
+                <br>
+                    <table style="font-size: 80%" id="maquinasTab" class="table  header-fixed  table-striped table-bordered table-hover ">
                        <thead class="header">
                             <tr>
-                                <th style="text-align: center; width: 25%">Aluno</th>
-                                <th style="text-align: center; width: 25%">Professor</th>
-                                <th style="text-align: center; width: 35%">Assunto</th>
+                                <th style="text-align: center; width: 15%">Aluno</th>
+                                <th style="text-align: center; width: 15%">Professor</th>
+                                <th style="text-align: center; width: 20%">Assunto</th>
                                 <th style="text-align: center; width: 15%">Data</th>
-                                <th style="text-align: center; width: 15%">Status</th>
-                                <th style="text-align: center; width: 15%"></th>
+                                <th style="text-align: center; width: 25%">Presença/Motivo</th>
+                                <th style="text-align: center; width: 5%">Status</th>
+                                
+                                <th style="text-align: center; width: 5%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -305,16 +457,57 @@ function isNumberKey(evt)
                         
                         %>
                         	<tr>
-								<td style="text-align: center; width: 25%" ><%=lab.getObCodaluno().getRsNummatricula() + " - " + lab.getObCodaluno().getRsDescnome()%></td>
-								<td style="text-align: center; width: 25%" ><%=lab.getObCodprofessor().getRsDescnome()%></td>
-								<td style="text-align: center; width: 25%" ><%=lab.getObCodassunto().getRsDescassunto()%></td>
-								<td style="text-align: center; width: 25%" ><%=new SimpleDateFormat("dd/MM/yyyy HH:mm").format(lab.getRsDataini())%></td>
-								<td style="text-align: center; width: 25%" ><%=status%></td>
-								<th style="text-align: center; width: 15%">
-								<%if(status.equalsIgnoreCase("ok")){ %> 
-									<button seqagend="<%=lab.getRsSeqagendametno()%>" class="sys_remove btn btn-primary" " >Cancelar</button> 
+								<td style="text-align: center; " ><%=lab.getObCodaluno().getRsNummatricula() + " - " + lab.getObCodaluno().getRsDescnome()%></td>
+								<td style="text-align: center; " ><%=lab.getObCodprofessor().getRsDescnome()%></td>
+								<td style="text-align: center; " ><%=lab.getObCodassunto().getRsDescassunto()%></td>
+								<td style="text-align: center; " ><%=new SimpleDateFormat("dd/MM/yyyy HH:mm").format(lab.getRsDataini())%></td>
+								
+							
+							
+							<td style="text-align: center; width: 15%">
+							<table>
+							<tr>
+								<%if(status.equalsIgnoreCase("ok")){
+									String texto = "";
+									if(lab.getRsFlagpresenca()==null || lab.getRsFlagpresenca().equalsIgnoreCase("") || lab.getRsFlagpresenca().equalsIgnoreCase("A") ){
+										texto = "Aberto";
+									}else if(lab.getRsFlagpresenca().equalsIgnoreCase("S")){
+										texto = "Presente";
+									}else if(lab.getRsFlagpresenca().equalsIgnoreCase("N")){
+										texto = "Ausente";
+									}
+									texto = texto + (lab.getRsDescmotivo()==null?"": (" - " +  lab.getRsDescmotivo()));
+									
+									%>
+									
+									<td  align="left" style="width: 95%">
+									<%=texto%>
+									</td>
+									<td align="right">
+									<div style="display: inline" align="right">
+										<button   seqagend="<%=lab.getRsSeqagendametno()%>" type="button" class="sys_presenca btn-xs btn-primary"  >
+										  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+									</button>
+									</td>
+									
+									</div> 
 								<%}%>
-								</th>
+								</tr>
+								</table>
+								</td>
+								
+								<td style="text-align: center; " ><%=status%></td>
+								<td style="text-align: center; width: 15%">
+							
+							
+							
+								<%if(status.equalsIgnoreCase("ok") && (lab.getRsFlagpresenca()==null || lab.getRsFlagpresenca().equalsIgnoreCase("") || lab.getRsFlagpresenca().equalsIgnoreCase("A") )){ %> 
+									<button style="font-size: 80%" seqagend="<%=lab.getRsSeqagendametno()%>" class="sys_cancela btn btn-primary"  >Cancelar</button> 
+								<%}%>
+								</td>
+								
+								
+								
                         	</tr>
 
                         <%}
@@ -328,6 +521,36 @@ function isNumberKey(evt)
                 </div>
             </div>
         </div>
+        
+        
+        
+        
+        	<div style="width: 75%" id="div_presenca">
+					<div  class="container" style="align: center; width: 95%" id="parent">
+						<input type="hidden" id="seq_agendamento" name="seq_agendamento">
+							<div style="width: 90%" class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<strong> Presença:</strong> <br>
+									<input type='radio'  name='opc_presen' value='S'>  <strong>Presente</strong>   
+									<input type='radio'  name='opc_presen' value='N'>  <strong>Ausente</strong> 
+									<input type='radio'  name='opc_presen' value='A'>  <strong>Em aberto</strong>
+								</div>
+								</div>
+								<br>
+								<div style="width: 90%" class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<strong>Observação/Motivo:</strong><br>
+									<textarea id="desc_motivo" rows="5" style="width: 95%"></textarea>
+								</div>
+								
+							
+							</div>
+					
+					
+					</div>
+
+	</div>
+        
 </body>
 </form>
         
