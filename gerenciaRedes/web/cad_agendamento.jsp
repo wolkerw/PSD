@@ -75,6 +75,7 @@ if(session.getAttribute("usuario")!=null){
 			data_depois =  formatter.format(dtDepois);
 			
 	}catch(Exception e){
+		e.printStackTrace();
 		errodata = true;
 	}
 	
@@ -86,10 +87,13 @@ if(session.getAttribute("usuario")!=null){
 	};
 	
 	
-	ResultSet rs = null;
+	ResultSet rs = null;  
 	//lab.lista();
 	if ((data_grid!=null) && (!data_grid.equals(""))){
 		rs = lab.carregaTabelaHorarios(data_grid);
+	}else{
+		data_grid	= new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+		rs = lab.carregaTabelaHorarios(data_grid );	
 	}
 	
 %>
@@ -152,6 +156,7 @@ $(document).ready(function() {
 		form.action="cad_agendamento.jsp";
 		form.submit();
 	});
+	
 
 	$("#incluir").button().click(function(){
 		
